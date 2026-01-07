@@ -9,7 +9,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: step-1
-              run: echo "Hello world"
+              run: |
+                  echo "Hello world"
+                  sleep 30
 
 # name: 4 job testing pipeline
 # on:
