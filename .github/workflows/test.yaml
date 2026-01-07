@@ -9,3 +9,12 @@ jobs:
     steps:
     - name: step
     run: echo "Hello"
+
+# name: 4 job testing pipeline
+# on:
+#     workflow_dispatch:
+# jobs:
+#     job-1:
+#         runs-on: ubuntu-latest
+#         steps:
+#             - run: echo "This is job 1"
