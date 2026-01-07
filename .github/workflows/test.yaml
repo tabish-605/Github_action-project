@@ -1,20 +1,20 @@
-# name: Tasting CICD pipeline
+name: Tasting CICD pipeline
 
-# on:
-#   push:
-#   - main
-# jobs:
-#   Build:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - name: step
-#     run: echo "Hello"
-
-name: 4 job testing pipeline
 on:
-    workflow_dispatch:
+    push:
+    - main
 jobs:
-    job-1:
+    Build:
         runs-on: ubuntu-latest
         steps:
-            - run: echo "This is job 1"
+        - name: step
+        run: echo "Hello"
+
+# name: 4 job testing pipeline
+# on:
+#     workflow_dispatch:
+# jobs:
+#     job-1:
+#         runs-on: ubuntu-latest
+#         steps:
+#             - run: echo "This is job 1"
