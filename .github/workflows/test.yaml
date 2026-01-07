@@ -7,8 +7,8 @@ jobs:
     Build:
         runs-on: ubuntu-latest
         steps:
-            - name: stepabc
-            run: echo "Hello"
+            # - name: stepabc
+            - run: echo "Hello"
 
 # name: 4 job testing pipeline
 # on:
