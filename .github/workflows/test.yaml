@@ -12,7 +12,7 @@ jobs:
         - name: mvn install
           run: |
             sudo apt update && sudo apt install default-jdk -y
-            sudo apt install maven -y
+            sudo apt install maven -y && sudo apt install unzip -y
 
         - name: Trivy Installation
           run: |
