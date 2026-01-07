@@ -2,10 +2,10 @@ name: Tasting CICD pipeline
 
 on:
   push:
-    - main
+  - main
 jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-    - name: step=1
-    run: echo "Hello"
+      - name: step=1
+      run: echo "Hello"
