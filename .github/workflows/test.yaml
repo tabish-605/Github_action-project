@@ -5,6 +5,7 @@ on:
     - main
 jobs:
   runs-on: ubuntu-latest
-  steps:
-    - name: Build
-    run: echo "Hello"
+  Bilid:
+    steps:
+      - name: step=1
+      run: echo "Hello"
