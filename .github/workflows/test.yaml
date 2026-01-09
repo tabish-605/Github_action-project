@@ -84,11 +84,34 @@ jobs:
         #     cache: maven
         - name: Build Project
           run: mvn package
-        - name: Upload JAR artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: app-jar
-            path: target/*.jar 
+        # - name: Upload JAR artifact
+        #   uses: actions/upload-artifact@v4
+        #   with:
+        #     name: app-jar
+        #     path: target/*.jar 
+
+        - name: Configure Maven for Nexus
+          run: |
+            mkdir -p ~/.m2
+            cat > ~/.m2/settings.xml <<EOF
+            <settings>
+              <servers>
+                <server>
+                  <id>maven-releases</id>
+                  <username>${{ secrets.NEXUS_USER }}</username>
+                  <password>${{ secrets.NEXUS_PASS }}</password>
+                </server>
+                <server>
+                  <id>maven-snapshots</id>
+                  <username>${{ secrets.NEXUS_USER }}</username>
+                  <password>${{ secrets.NEXUS_PASS }}</password>
+                </server>
+              </servers>
+            </settings>
+            EOF
+
+        - name: Build & Deploy
+          run: mvn clean deploy
             
         - uses: actions/checkout@v4
           with:
