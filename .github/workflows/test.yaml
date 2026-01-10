@@ -24,8 +24,8 @@ jobs:
             sudo apt-get update -y
             sudo apt-get install -y trivy
 
-        # - name: Gitleaks Installation
-        #   run: sudo apt install gitleaks -y
+        - name: Gitleaks Installation
+          run: sudo apt install gitleaks -y
 
     compile:
         runs-on: self-hosted
@@ -33,12 +33,12 @@ jobs:
         needs: Install
         steps:
         - uses: actions/checkout@v4
-        # # - name: Set up JDK 17
-        # #   uses: actions/setup-java@v4
-        #   with:
-        #       java-version: '17'
-        #       distribution: 'temurin'
-        #       cache: maven
+        - name: Set up JDK 17
+          uses: actions/setup-java@v4
+          with:
+              java-version: '17'
+              distribution: 'temurin'
+              cache: maven
         - name: Build with Maven
           run: mvn compile
 
@@ -61,12 +61,12 @@ jobs:
         needs: security-check
         steps:
         - uses: actions/checkout@v4
-        # - name: Set up JDK 17
-        #   uses: actions/setup-java@v4
-        #   with:
-        #       java-version: '17'
-        #       distribution: 'temurin'
-        #       cache: maven
+        - name: Set up JDK 17
+          uses: actions/setup-java@v4
+          with:
+              java-version: '17'
+              distribution: 'temurin'
+              cache: maven
         - name: Unit Test Cases
           run: mvn test
 
@@ -76,12 +76,12 @@ jobs:
         needs: test
         steps:
         - uses: actions/checkout@v4
-        # - name: Set up JDK 17
-        #   uses: actions/setup-java@v4
-        #   with:
-        #     java-version: '17'
-        #     distribution: 'temurin'
-        #     cache: maven
+        - name: Set up JDK 17
+          uses: actions/setup-java@v4
+          with:
+            java-version: '17'
+            distribution: 'temurin'
+            cache: maven
         - name: Build Project
           run: mvn package
         # - name: Upload JAR artifact
@@ -132,16 +132,23 @@ jobs:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
             
-        - name: Get project version
-          id: version
-          run: echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
 
-        - name: Build Docker image from Nexus
-          run: |
-            docker build \
-              --build-arg NEXUS_URL=${{ secrets.NEXUS_URL }} \
-              --build-arg NEXUS_USER=${{ secrets.NEXUS_USER }} \
-              --build-arg NEXUS_PASS=${{ secrets.NEXUS_PASS }} \
-              --build-arg VERSION=${{ steps.version.outputs.version }} \
-              -t bankapp:${{ steps.version.outputs.version }} .
+    
+    Docker_build:
+        runs-on: self-hosted
+        needs: build_project_and_sonar_scan
+        steps:
+          - uses: actions/checkout@v4
+          - name: Get project version
+            id: version
+            run: echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+
+          - name: Build Docker image from Nexus
+            run: |
+              docker build \
+                --build-arg NEXUS_URL=${{ secrets.NEXUS_URL }} \
+                --build-arg NEXUS_USER=${{ secrets.NEXUS_USER }} \
+                --build-arg NEXUS_PASS=${{ secrets.NEXUS_PASS }} \
+                --build-arg VERSION=${{ steps.version.outputs.version }} \
+                -t bankapp:${{ steps.version.outputs.version }} .
 
