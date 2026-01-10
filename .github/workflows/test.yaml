@@ -110,8 +110,8 @@ jobs:
             </settings>
             EOF
 
-        # - name: Build & Deploy
-        #   run: mvn clean deploy
+        - name: Build & Deploy
+          run: mvn clean deploy
             
         - uses: actions/checkout@v4
           with:
