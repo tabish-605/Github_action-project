@@ -177,7 +177,7 @@ jobs:
               REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
               REGISTRY_ALIAS: j6u4l5d9
               REPOSITORY: test/java
-              IMAGE_TAG: 0.0.1
+              IMAGE_TAG: ${{ steps.version.outputs.version }}
             run: |
               docker tag bankapp:$IMAGE_TAG $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
               docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
