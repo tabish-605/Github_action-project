@@ -2,8 +2,12 @@ name: CICD Pipeline
 
 on:
     push:
-        branches: [ "main1" ]
+        branches: [ "main" ]
     workflow_dispatch:
+
+permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read  
 
 jobs:
     Install:
