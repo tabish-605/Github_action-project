@@ -131,4 +131,17 @@ jobs:
           env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+            
+        - name: Get project version
+          id: version
+          run: echo "version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+
+        - name: Build Docker image from Nexus
+          run: |
+            docker build \
+              --build-arg NEXUS_URL=${{ secrets.NEXUS_URL }} \
+              --build-arg NEXUS_USER=${{ secrets.NEXUS_USER }} \
+              --build-arg NEXUS_PASS=${{ secrets.NEXUS_PASS }} \
+              --build-arg VERSION=${{ steps.version.outputs.version }} \
+              -t bankapp:${{ steps.version.outputs.version }} .
 
