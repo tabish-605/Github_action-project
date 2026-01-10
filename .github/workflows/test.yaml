@@ -153,12 +153,6 @@ jobs:
                   --build-arg VERSION="${{ steps.version.outputs.version }}" \
                   -t "bankapp:${{ steps.version.outputs.version }}" .
 
-          - name: Configure AWS credentials
-            uses: aws-actions/configure-aws-credentials@v4 # More information on this action can be found below in the 'AWS Credentials' section
-            with:
-              role-to-assume: arn:aws:iam::123456789012:role/my-github-actions-role
-              aws-region: us-east-1
-
           - name: Login to Amazon ECR Public
             id: login-ecr-public
             uses: aws-actions/amazon-ecr-login@v2
