@@ -1,0 +1,48 @@
+name: Terraform Pipeline
+on:
+    push:
+        paths:
+            - 'Terraform/Application/**'
+            - '.github/workflows/terraform-pipeline.yml'
+    workflow_dispatch:
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    Terraform_Plan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            
+            
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.7.5
+
+            - name: aws configuratiion
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                aws-region: us-east-1
+                role-to-assume: arn:aws:iam::588434007010:role/Github_oidc
+            
+            - name: Terraform Init
+              working-directory: ./Terraform/Application
+              run: terraform init
+            
+
+            - name: Terraform Plan
+              working-directory: ./Terraform/Application
+              run: terraform plan -var-file="dev.tfvars" -out=tfplan
+
+            # - name: Upload Terraform Plan Artifact
+            #   uses: actions/upload-artifact@v4
+
+            - name: Terraform Apply
+            
+              working-directory: ./Terraform/Application
+              run: terraform apply "tfplan"
+              

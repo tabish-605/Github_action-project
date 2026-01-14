@@ -1,0 +1,5 @@
+instance_type = "t2.micro"
+ami = "ami-07ff62358b87c7116"
+security_group = "sg-0563980d09ed70a67"
+subnet_id = "subnet-015ed8decd8bdea82"
+vpc = "vpc-033d3f73769d2bfe1"
