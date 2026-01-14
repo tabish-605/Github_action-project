@@ -96,7 +96,7 @@ jobs:
                 path: ./Terraform/Application
             
             - name: Terraform Apply
-              if: needs.Terraform_Plan.outputs.error_code == '2'
+              if: needs.Terraform_Plan.outputs.error_code == '0'
               working-directory: ./Terraform/Application
               run: terraform apply "tfplan"
     
