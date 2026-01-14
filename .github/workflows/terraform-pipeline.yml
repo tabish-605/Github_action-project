@@ -23,7 +23,7 @@ jobs:
     Terraform_Plan:
         runs-on: ubuntu-latest
         outputs:
-          error_code: ${{ steps.terraform-plan.exit_code }}
+          error_code: ${{ steps.terraform-plan.outputs.exit_code }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
