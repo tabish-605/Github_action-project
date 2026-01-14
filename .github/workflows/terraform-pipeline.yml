@@ -69,7 +69,7 @@ jobs:
             - name: Backend configuration
               working-directory: ./Terraform/Application
               run: |
-                    terraform init -reconfigure \
+                    terraform init \
                     -backend-config="bucket=terraform-backend-tabish" \
                     -backend-config="key=terraform.tfstate" \
                     -backend-config="region=us-east-1" 
