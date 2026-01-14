@@ -14,7 +14,3 @@ variable "subnet_id" {
   description = "value"
   type = string 
 }
-variable "vpc" {
-  description = "value"
-  type = string 
-}
