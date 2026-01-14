@@ -33,7 +33,7 @@ jobs:
               working-directory: ./Terraform/Application
               run: |
                     terraform init \
-                    -backend-config="bucket="terraform-backend-tabish" \
+                    -backend-config="bucket=terraform-backend-tabish" \
                     -backend-config="key=terraform.tfstate" \
                     -backend-config="region=us-east-1" 
 
