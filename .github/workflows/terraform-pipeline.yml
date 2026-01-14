@@ -5,6 +5,15 @@ on:
             - 'Terraform/Application/**'
             - '.github/workflows/terraform-pipeline.yml'
     workflow_dispatch:
+      inputs:
+        environment:
+          description: 'Select the environment to deploy'
+          default: dev
+          required: true
+          type: choice
+          options:
+            - dev
+            - prod
 
 permissions:
     id-token: write
@@ -13,6 +22,8 @@ permissions:
 jobs:
     Terraform_Plan:
         runs-on: ubuntu-latest
+        outputs:
+          error_code: ${{ steps.terraform-plan.exit_code }}
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -23,7 +34,7 @@ jobs:
               with:
                 terraform_version: 1.7.5
 
-            - name: aws configuratiion
+            - name: aws configuration
               uses: aws-actions/configure-aws-credentials@v2
               with:
                 aws-region: us-east-1
@@ -38,8 +49,11 @@ jobs:
                     -backend-config="region=us-east-1" 
 
             - name: Terraform Plan
+              id: terraform-plan
               working-directory: ./Terraform/Application
-              run: terraform plan -var-file="dev.tfvars" -out=tfplan
+              run: |
+                terraform plan -var-file="dev.tfvars" -out=tfplan -detailed-exitcode
+                echo "exit_code=$?" >> $GITHUB_OUTPUT
 
             - name: Upload Terraform Plan Artifact
               uses: actions/upload-artifact@v4
@@ -69,7 +83,7 @@ jobs:
             - name: Backend configuration
               working-directory: ./Terraform/Application
               run: |
-                    terraform init \
+                    terraform init -reconfigure \
                     -backend-config="bucket=terraform-backend-tabish" \
                     -backend-config="key=terraform.tfstate" \
                     -backend-config="region=us-east-1" 
@@ -81,6 +95,7 @@ jobs:
                 path: ./Terraform/Application
             
             - name: Terraform Apply
+              if: needs.Terraform_Plan.outputs.error_code == '2'
               working-directory: ./Terraform/Application
               run: terraform apply "tfplan"
     
