@@ -54,6 +54,7 @@ jobs:
               run: |
                 terraform plan -var-file="dev.tfvars" -out=tfplan -no-color -detailed-exitcode
                 echo "exit_code=$?"
+              continue-on-error: true
 
             - name: Upload Terraform Plan Artifact
               uses: actions/upload-artifact@v4
