@@ -53,5 +53,5 @@ jobs:
               run: sleep 30s
             - name: Terraform Destroy
               working-directory: ./Terraform/Application
-              run: terraform destroy -var-file="dev.tfvars"
+              run: terraform destroy -var-file="dev.tfvars" --auto-approve
               
