@@ -41,17 +41,47 @@ jobs:
               working-directory: ./Terraform/Application
               run: terraform plan -var-file="dev.tfvars" -out=tfplan
 
-            # - name: Upload Terraform Plan Artifact
-            #   uses: actions/upload-artifact@v4
+            - name: Upload Terraform Plan Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: terraform-plan
+                path: ./Terraform/Application/tfplan
 
-            - name: Terraform Apply
+
+    Terraform_Apply:
+        runs-on: ubuntu-latest
+        needs: Terraform_Plan
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
             
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.7.5
+
+            - name: aws configuratiion
+              uses: aws-actions/configure-aws-credentials@v2
+              with:
+                aws-region: us-east-1
+                role-to-assume: arn:aws:iam::588434007010:role/Github_oidc
+
+            - name: Backend configuration
+              working-directory: ./Terraform/Application
+              run: |
+                    terraform init -reconfigure \
+                    -backend-config="bucket=terraform-backend-tabish" \
+                    -backend-config="key=terraform.tfstate" \
+                    -backend-config="region=us-east-1" 
+
+            - name: Download Terraform Plan Artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: terraform-plan
+                path: ./Terraform/Application
+            
+            - name: Terraform Apply
               working-directory: ./Terraform/Application
               run: terraform apply "tfplan"
-
-            - name: wait for 10 seconds
-              run: sleep 10s
-            - name: Terraform Destroy
-              working-directory: ./Terraform/Application
-              run: terraform destroy --auto-approve -var-file="dev.tfvars"
+    
               
