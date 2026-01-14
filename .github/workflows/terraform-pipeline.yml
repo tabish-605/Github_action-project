@@ -49,9 +49,9 @@ jobs:
               working-directory: ./Terraform/Application
               run: terraform apply "tfplan"
 
-            - name: wait for 30 seconds
-              run: sleep 30s
+            - name: wait for 10 seconds
+              run: sleep 10s
             - name: Terraform Destroy
               working-directory: ./Terraform/Application
-              run: terraform destroy -var-file="dev.tfvars" --auto-approve
+              run: terraform destroy "tfplan"
               
