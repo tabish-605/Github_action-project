@@ -29,10 +29,6 @@ jobs:
                 aws-region: us-east-1
                 role-to-assume: arn:aws:iam::588434007010:role/Github_oidc
             
-            - name: Terraform Init
-              working-directory: ./Terraform/Application
-              run: terraform init
-            
             - name: Backend configuration
               working-directory: ./Terraform/Application
               run: |
