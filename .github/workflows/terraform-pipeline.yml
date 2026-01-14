@@ -52,7 +52,7 @@ jobs:
               id: terraform-plan
               working-directory: ./Terraform/Application
               run: |
-                terraform plan -var-file="dev.tfvars" -out=tfplan -detailed-exitcode
+                terraform plan -var-file="dev.tfvars" -out=tfplan -no-color -detailed-exitcode
                 echo "exit_code=$?" >> $GITHUB_OUTPUT
                 echo "exit_code=$?"
 
