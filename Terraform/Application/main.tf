@@ -4,5 +4,5 @@ module "ec2" {
     ami            = var.ami
     security_group = var.security_group
     subnet_id      = var.subnet_id
-    vpc            = var.vpc
+    
 }
