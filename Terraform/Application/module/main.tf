@@ -5,7 +5,7 @@ resource "aws_instance" "example" {
     security_groups = [var.security_group]
     
     tags = {
-      Name = "TerraformExampleInstance"
+      Name = "Test"
     }
 
 }
