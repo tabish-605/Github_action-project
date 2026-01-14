@@ -33,6 +33,13 @@ jobs:
               working-directory: ./Terraform/Application
               run: terraform init
             
+            - name: Backend configuration
+              working-directory: ./Terraform/Application
+              run: |
+                    terraform init \
+                    -backend-config="bucket="terraform-backend-tabish" \
+                    -backend-config="key=terraform.tfstate" \
+                    -backend-config="region=us-east-1" 
 
             - name: Terraform Plan
               working-directory: ./Terraform/Application
@@ -46,8 +53,8 @@ jobs:
               working-directory: ./Terraform/Application
               run: terraform apply "tfplan"
 
-            - name: wait for 120 seconds
-              run: sleep 120s
+            - name: wait for 30 seconds
+              run: sleep 30s
             - name: Terraform Destroy
               working-directory: ./Terraform/Application
               run: terraform destroy -var-file="dev.tfvars"
